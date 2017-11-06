@@ -9,21 +9,18 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
+    <div class="navbar navbar-inverse navbar-fixed-top" >
+        <div class="container">     
+            <div class="navbar-header">               
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    <span class="icon-bar"></span>                    
+                </button>               
+                @Html.ActionLink("Island Escape", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                <ul class="nav navbar-nav">                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -32,8 +29,9 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        <footer style="text-align:center">
+            <a target="_blank" href="https://www.fairfield.edu/graduate/academics/school-of-engineering/programs/software-engineering/"><img src="~/Images/fairfield_logo.png" alt="Fairfield University" width="150" height="133" style="margin-bottom:15px" /></a>
+            <p >&copy; @DateTime.Now.Year - Fairfield University</p>
         </footer>
     </div>
 
