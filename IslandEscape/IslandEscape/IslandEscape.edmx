@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IslandEscapeOfficialModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Configurations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BrightnessLevel" Type="int" Nullable="false" />
+          <Property Name="SoundLevel" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Chosen" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Games">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Start" Type="datetime" Nullable="false" />
+          <Property Name="IntensityLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SavdGameStates">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GameId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Saved" Type="datetime" Nullable="false" />
+          <Property Name="Progress" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="AccessLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Configurations_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Configurations" Type="Self.Configurations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Configurations">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavdGameStates_Games">
+          <End Role="Games" Type="Self.Games" Multiplicity="1" />
+          <End Role="SavdGameStates" Type="Self.SavdGameStates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Games">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SavdGameStates">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavdGameStates_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="SavdGameStates" Type="Self.SavdGameStates" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SavdGameStates">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IslandEscapeOfficialModelStoreContainer">
+          <EntitySet Name="Configurations" EntityType="Self.Configurations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Games" EntityType="Self.Games" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SavdGameStates" EntityType="Self.SavdGameStates" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Configurations_Users" Association="Self.FK_Configurations_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Configurations" EntitySet="Configurations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavdGameStates_Games" Association="Self.FK_SavdGameStates_Games">
+            <End Role="Games" EntitySet="Games" />
+            <End Role="SavdGameStates" EntitySet="SavdGameStates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavdGameStates_Users" Association="Self.FK_SavdGameStates_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="SavdGameStates" EntitySet="SavdGameStates" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IslandEscapeOfficialModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AccessLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Configurations" Relationship="IslandEscapeOfficialModel.FK_Configurations_Users" FromRole="User" ToRole="Configuration" />
+          <NavigationProperty Name="SavdGameStates" Relationship="IslandEscapeOfficialModel.FK_SavdGameStates_Users" FromRole="User" ToRole="SavdGameState" />
+        </EntityType>
+        <EntityContainer Name="IslandEscapeOfficialEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Configurations" EntityType="IslandEscapeOfficialModel.Configuration" />
+          <EntitySet Name="Games" EntityType="IslandEscapeOfficialModel.Game" />
+          <EntitySet Name="SavdGameStates" EntityType="IslandEscapeOfficialModel.SavdGameState" />
+          <AssociationSet Name="FK_Configurations_Users" Association="IslandEscapeOfficialModel.FK_Configurations_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Configuration" EntitySet="Configurations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavdGameStates_Games" Association="IslandEscapeOfficialModel.FK_SavdGameStates_Games">
+            <End Role="Game" EntitySet="Games" />
+            <End Role="SavdGameState" EntitySet="SavdGameStates" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SavdGameStates_Users" Association="IslandEscapeOfficialModel.FK_SavdGameStates_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="SavdGameState" EntitySet="SavdGameStates" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Configuration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BrightnessLevel" Type="Int32" Nullable="false" />
+          <Property Name="SoundLevel" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Chosen" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="IslandEscapeOfficialModel.FK_Configurations_Users" FromRole="Configuration" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Game">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Start" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IntensityLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="SavdGameStates" Relationship="IslandEscapeOfficialModel.FK_SavdGameStates_Games" FromRole="Game" ToRole="SavdGameState" />
+        </EntityType>
+        <EntityType Name="SavdGameState">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GameId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Saved" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Progress" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Game" Relationship="IslandEscapeOfficialModel.FK_SavdGameStates_Games" FromRole="SavdGameState" ToRole="Game" />
+          <NavigationProperty Name="User" Relationship="IslandEscapeOfficialModel.FK_SavdGameStates_Users" FromRole="SavdGameState" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Configurations_Users">
+          <End Type="IslandEscapeOfficialModel.User" Role="User" Multiplicity="1" />
+          <End Type="IslandEscapeOfficialModel.Configuration" Role="Configuration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Configuration">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavdGameStates_Games">
+          <End Type="IslandEscapeOfficialModel.Game" Role="Game" Multiplicity="1" />
+          <End Type="IslandEscapeOfficialModel.SavdGameState" Role="SavdGameState" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Game">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SavdGameState">
+              <PropertyRef Name="GameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SavdGameStates_Users">
+          <End Type="IslandEscapeOfficialModel.User" Role="User" Multiplicity="1" />
+          <End Type="IslandEscapeOfficialModel.SavdGameState" Role="SavdGameState" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SavdGameState">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IslandEscapeOfficialModelStoreContainer" CdmEntityContainer="IslandEscapeOfficialEntities">
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="IslandEscapeOfficialModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="AccessLevel" ColumnName="AccessLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Configurations">
+            <EntityTypeMapping TypeName="IslandEscapeOfficialModel.Configuration">
+              <MappingFragment StoreEntitySet="Configurations">
+                <ScalarProperty Name="Chosen" ColumnName="Chosen" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="SoundLevel" ColumnName="SoundLevel" />
+                <ScalarProperty Name="BrightnessLevel" ColumnName="BrightnessLevel" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Games">
+            <EntityTypeMapping TypeName="IslandEscapeOfficialModel.Game">
+              <MappingFragment StoreEntitySet="Games">
+                <ScalarProperty Name="IntensityLevel" ColumnName="IntensityLevel" />
+                <ScalarProperty Name="Start" ColumnName="Start" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SavdGameStates">
+            <EntityTypeMapping TypeName="IslandEscapeOfficialModel.SavdGameState">
+              <MappingFragment StoreEntitySet="SavdGameStates">
+                <ScalarProperty Name="Progress" ColumnName="Progress" />
+                <ScalarProperty Name="Saved" ColumnName="Saved" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

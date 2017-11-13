@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="03270f37387d486cb8a5029c387a926d" Name="Diagram1">
+        <EntityTypeShape EntityType="IslandEscapeOfficialModel.User" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="IslandEscapeOfficialModel.Configuration" Width="1.5" PointX="4.625" PointY="8" />
+        <EntityTypeShape EntityType="IslandEscapeOfficialModel.Game" Width="1.5" PointX="2.375" PointY="3.875" />
+        <EntityTypeShape EntityType="IslandEscapeOfficialModel.SavdGameState" Width="1.5" PointX="4.625" PointY="0.625" />
+        <AssociationConnector Association="IslandEscapeOfficialModel.FK_Configurations_Users" />
+        <AssociationConnector Association="IslandEscapeOfficialModel.FK_SavdGameStates_Games" />
+        <AssociationConnector Association="IslandEscapeOfficialModel.FK_SavdGameStates_Users" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

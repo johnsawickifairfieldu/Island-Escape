@@ -51,7 +51,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -167,29 +170,76 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Configuration.cs">
+      <DependentUpon>IslandEscape.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ConfigurationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\SavdGameStatesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Game.cs">
+      <DependentUpon>IslandEscape.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="IslandEscape.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IslandEscape.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IslandEscape.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IslandEscape.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IslandEscape.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IslandEscape.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SavdGameState.cs">
+      <DependentUpon>IslandEscape.tt</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="User.cs">
+      <DependentUpon>IslandEscape.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Game\game.html" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="IslandEscape.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>IslandEscape.edmx</DependentUpon>
+      <LastGenOutput>IslandEscape.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="IslandEscape.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>IslandEscape.edmx</DependentUpon>
+      <LastGenOutput>IslandEscape.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="IslandEscape.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>IslandEscape.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="IslandEscape.edmx.diagram">
+      <DependentUpon>IslandEscape.edmx</DependentUpon>
+    </Content>
+    <Content Include="Game\all.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -243,6 +293,16 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Configurations\Create.cshtml" />
+    <Content Include="Views\Configurations\Delete.cshtml" />
+    <Content Include="Views\Configurations\Details.cshtml" />
+    <Content Include="Views\Configurations\Edit.cshtml" />
+    <Content Include="Views\Configurations\Index.cshtml" />
+    <Content Include="Views\SavdGameStates\Create.cshtml" />
+    <Content Include="Views\SavdGameStates\Delete.cshtml" />
+    <Content Include="Views\SavdGameStates\Details.cshtml" />
+    <Content Include="Views\SavdGameStates\Edit.cshtml" />
+    <Content Include="Views\SavdGameStates\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -255,6 +315,9 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

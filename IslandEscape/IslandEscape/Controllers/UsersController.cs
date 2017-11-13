@@ -6,18 +6,22 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using IslandEscape.Models;
+using IslandEscape;
+using Microsoft.AspNet.Identity;
 
 namespace IslandEscape.Controllers
 {
     public class UsersController : Controller
     {
-        private IslandEscapeDBContext db = new IslandEscapeDBContext();
+        private IslandEscapeOfficialEntities db = new IslandEscapeOfficialEntities();
 
         // GET: Users
         public ActionResult Index()
         {
-            return View(db.Users.ToList());
+            string user_id = User.Identity.GetUserId();
+            int user_al = db.Users.Where(user => user.Id == user_id).FirstOrDefault().AccessLevel;
+
+            return View(db.Users.Where(user=>user.Id == user_id || user_al >= 2).ToList());
         }
 
         // GET: Users/Details/5
@@ -46,7 +50,7 @@ namespace IslandEscape.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,AccessLevel")] User user)
+        public ActionResult Create([Bind(Include = "Id,UserName,AccessLevel")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -78,11 +82,11 @@ namespace IslandEscape.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,AccessLevel")] User user)
+        public ActionResult Edit([Bind(Include = "Id,UserName,AccessLevel")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
+                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

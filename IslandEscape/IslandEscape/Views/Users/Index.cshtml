@@ -1,18 +1,21 @@
-﻿@model IEnumerable<IslandEscape.Models.User>
+﻿@using Microsoft.AspNet.Identity
+@model IEnumerable<IslandEscape.User>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Users List";
+    string user_id = User.Identity.GetUserId();
+    int user_al = Model.Where(user => user.Id == user_id).FirstOrDefault().AccessLevel;
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+   
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.UserName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.AccessLevel)
@@ -23,15 +26,15 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => item.UserName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.AccessLevel)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+        <td>             
+            @if (user_al > 2 || user_id == item.Id) {@Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text>|</text>}
+            @if (user_al > 2 || user_id == item.Id || (user_al == 2 && item.AccessLevel < 3)) {@Html.ActionLink("Configurations", "Index", "Configurations", new { config_user_id = item.Id }, null)} @if(user_al > 2 && user_id != item.Id){ <text>|</text>
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })}
         </td>
     </tr>
 }

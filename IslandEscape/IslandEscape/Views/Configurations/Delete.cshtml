@@ -1,0 +1,48 @@
+﻿@model IslandEscape.Configuration
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Configuration</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BrightnessLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BrightnessLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SoundLevel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SoundLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Chosen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Chosen)
+        </dd>
+        
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index", "Configurations", new { config_user_id = Model.UserId }, null)
+        </div>
+    }
+</div>

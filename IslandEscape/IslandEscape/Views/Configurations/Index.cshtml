@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNet.Identity
+@model IslandEscape.User
+
+@{
+    ViewBag.Title = "Configurations";
+    string user_id = User.Identity.GetUserId();
+    int user_al = (new IslandEscapeOfficialEntities()).Users.Where(user => user.Id == user_id).FirstOrDefault().AccessLevel;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+   @if (user_al > 2 || user_id == Model.Id) { @Html.ActionLink("Create New", "Create", "Configurations", new { config_user_id = Model.Id }, null)}
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Brightness Level
+        </th>
+        <th>
+            Sound Level
+        </th>
+        <th>
+            Chosen
+        </th>        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Configurations) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BrightnessLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SoundLevel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Chosen)
+        </td>      
+        <td>@if (user_al > 2 || user_id == Model.Id)
+        {
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) <text>|</text>
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        }
+        </td>
+    </tr>
+}
+
+</table>
+
+<div>
+    @Html.ActionLink("Back to Users List", "Index", "Users")
+</div>

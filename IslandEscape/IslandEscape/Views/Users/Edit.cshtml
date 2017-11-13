@@ -1,7 +1,10 @@
-﻿@model IslandEscape.Models.User
+﻿@using Microsoft.AspNet.Identity
+@model IslandEscape.User
 
 @{
     ViewBag.Title = "Edit";
+    string user_id = User.Identity.GetUserId();
+    bool show = (new IslandEscapeOfficialEntities()).Users.Where(user => user.Id == user_id).FirstOrDefault().AccessLevel > 2;
 }
 
 <h2>Edit</h2>
@@ -15,17 +18,17 @@
         <h4>User</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        <div style="@(show ? "display:block" : "display:none")" class="form-group">
             @Html.LabelFor(model => model.AccessLevel, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.AccessLevel, new { htmlAttributes = new { @class = "form-control" } })
