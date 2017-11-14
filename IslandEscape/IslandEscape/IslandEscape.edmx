@@ -11,7 +11,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BrightnessLevel" Type="int" Nullable="false" />
-          <Property Name="SoundLevel" Type="int" Nullable="false" />
+          <Property Name="SoundLevel" Type="bit" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Chosen" Type="bit" Nullable="false" />
         </EntityType>
@@ -133,7 +133,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BrightnessLevel" Type="Int32" Nullable="false" />
-          <Property Name="SoundLevel" Type="Int32" Nullable="false" />
+          <Property Name="SoundLevel" Type="Boolean" Nullable="false" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Chosen" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="User" Relationship="IslandEscapeOfficialModel.FK_Configurations_Users" FromRole="Configuration" ToRole="User" />

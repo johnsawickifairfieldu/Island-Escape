@@ -21,7 +21,7 @@ namespace IslandEscape
             this.Configurations = new HashSet<Configuration>();
             this.SavdGameStates = new HashSet<SavdGameState>();
         }
-
+    
         [Key]
         public string Id { get; set; }
 
@@ -35,7 +35,7 @@ namespace IslandEscape
         [Required(ErrorMessage = "Select an access level.")]
         [Range(0, 3, ErrorMessage = "Access level must be between 0 and 3")]
         public int AccessLevel { get; set; }
-        
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Configuration> Configurations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

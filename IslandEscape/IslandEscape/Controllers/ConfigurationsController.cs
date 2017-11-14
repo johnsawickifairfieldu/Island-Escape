@@ -12,7 +12,7 @@ namespace IslandEscape.Controllers
 
         public static string GetConfigurationURLPart(string user_id)
         {
-            int? sound = null;
+            bool? sound = null;
             int? brightness = null;
 
             using(var context = new IslandEscapeOfficialEntities())
@@ -27,7 +27,7 @@ namespace IslandEscape.Controllers
 
             }
 
-            return "&sound=" + (sound != null ? sound : 100) + "&brightness=" + (brightness != null ? brightness : 100);
+            return "&sound=" + sound + "&brightness=" + (brightness != null ? brightness : 100);
         }
 
         // GET: Configurations
@@ -56,7 +56,7 @@ namespace IslandEscape.Controllers
         {
             ViewBag.UserId = getSelectList(config_user_id);
             ViewBag.ConfigurationUserId = config_user_id;
-            return View();
+            return View(new Configuration());
         }
 
         // POST: Configurations/Create

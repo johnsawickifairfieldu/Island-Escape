@@ -28,23 +28,28 @@ namespace IslandEscape.Controllers
         }
 
         [WebMethod]
-        public static void SaveGame(int game_id, string user_id, int progress)
+        public static string SaveGame(int game_id, string user_id, int progress)
         {
+            int records = 0;
+
             using (var context = new IslandEscapeOfficialEntities())
             {
                 var new_game_state = new SavdGameState { GameId = game_id, UserId = user_id, Progress = progress, Saved = DateTime.Now };
 
                 context.SavdGameStates.Add(new_game_state);
-                context.SaveChanges();
+                records = context.SaveChanges();
             }
+
+            return "{\"result\":" + (records == 0 ? false : true) + "}";
         }
 
         // GET: SavdGameStates
         public ActionResult Index()
         {
             string user_id = User.Identity.GetUserId();
+            int access_level = db.Users.Where(u => u.Id == user_id).FirstOrDefault().AccessLevel;
 
-            var savdGameStates = db.SavdGameStates.Include(s => s.Game).Include(s => s.User).OrderByDescending(s => s.UserId == user_id).ThenByDescending(s => s.Progress >= 100 ? -1 : 1).ThenByDescending(s => s.Saved);
+            var savdGameStates = db.SavdGameStates.Where(s => s.UserId == user_id || access_level >= 2).Include(s => s.Game).Include(s => s.User).OrderByDescending(s => s.UserId == user_id).ThenByDescending(s => s.Progress >= 100 ? -1 : 1).ThenByDescending(s => s.Saved);
 
             return View(savdGameStates.ToList());
         }

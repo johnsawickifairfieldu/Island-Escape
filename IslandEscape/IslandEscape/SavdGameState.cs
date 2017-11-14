@@ -25,12 +25,13 @@ namespace IslandEscape
         {
             get
             {
-                if(this.isPlayable == null)
+                if (this.isPlayable == null)
                 {
-                    if(Progress >= 100)
+                    if (Progress >= 100)
                     {
                         this.isPlayable = false;
-                    }else
+                    }
+                    else
                     {
 
                         DateTime max_datetime = DateTime.MinValue;
@@ -55,7 +56,7 @@ namespace IslandEscape
                 return this.isPlayable.Value;
             }
         }
-    
+
         public virtual Game Game { get; set; }
         public virtual User User { get; set; }
     }

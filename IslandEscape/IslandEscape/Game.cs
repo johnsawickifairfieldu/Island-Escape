@@ -9,23 +9,28 @@
 
 namespace IslandEscape
 {
-    using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Game
     {
+
+        private string intensityDesc;
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Game()
         {
             this.SavdGameStates = new HashSet<SavdGameState>();
         }
-
-        private string intensityDesc;
     
+        [Key]
         public int Id { get; set; }
         public System.DateTime Start { get; set; }
+        [Display(Name = "Difficulty")]
+        [Required(ErrorMessage = "Select a difficulty level.")]
+        [Range(0, 100, ErrorMessage = "Difficulty level must be between 0 and 100")]
         public int IntensityLevel { get; set; }
-
+    
         public string IntensityDesc
         {
             get
@@ -35,12 +40,10 @@ namespace IslandEscape
                     if(IntensityLevel >= 3)
                     {
                         this.intensityDesc = "Hard";
-                    }
-                    else if(IntensityLevel == 2)
+                    }else if(IntensityLevel == 2)
                     {
                         this.intensityDesc = "Medium";
-                    }
-                    else
+                    }else
                     {
                         this.intensityDesc = "Easy";
                     }
@@ -49,7 +52,7 @@ namespace IslandEscape
                 return this.intensityDesc;
             }
         }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SavdGameState> SavdGameStates { get; set; }
     }

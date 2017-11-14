@@ -23,6 +23,9 @@
             @Html.DisplayNameFor(model => model.Progress)
         </th>
         <th>
+            Escaped or Sank?
+        </th>
+        <th>
             Game ID
         </th>        
         <th>
@@ -37,7 +40,21 @@
             @Html.DisplayFor(modelItem => item.Saved)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Progress)
+            @if(item.Progress > 100)
+            {
+                <text>100</text>
+            }
+            else
+            {
+                @Html.DisplayFor(modelItem => item.Progress)
+            }
+        </td>
+        <td>
+            @if (item.Progress > 100)
+            {<text>Escaped</text>}
+            else if(item.Progress == 100)
+            { <text>Sank</text>}
+            else { <text>Still Stranded</text>}
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Game.Id) (Difficulty: @Html.DisplayFor(modelItem => item.Game.IntensityDesc))
@@ -45,7 +62,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.User.UserName)
         </td>
-        <td>@if (item.UserId == user_id && item.IsPlayable) { 
+        <td style="display:none;">@if (item.UserId == user_id && item.IsPlayable) { 
             <a href="@string.Format("../Game/game.html?gameid={0}&userid={1}&username={2}&progress={3}&intensity={4}{5}",item.GameId, item.UserId, item.User.UserName, item.Progress, item.Game.IntensityLevel, config)">Continue Playing</a>}
         </td>
     </tr>

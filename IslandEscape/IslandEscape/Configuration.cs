@@ -9,14 +9,11 @@
 
 namespace IslandEscape
 {
-    using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class Configuration
     {
-
         [Key]
         public int Id { get; set; }
 
@@ -25,16 +22,14 @@ namespace IslandEscape
         [Range(0, 100, ErrorMessage = "Brightness level must be between 0 and 100")]
         public int BrightnessLevel { get; set; }
 
-        [Display(Name = "Sound Level")]
-        [Required(ErrorMessage = "Select a sound level.")]
-        [Range(0, 100, ErrorMessage = "Sound level must be between 0 and 100")]
-        public int SoundLevel { get; set; }
+        [Display(Name = "Sound")]
+        public bool SoundLevel { get; set; } = true;
 
         [ForeignKey("User")]
         public string UserId { get; set; }
 
         public bool Chosen { get; set; }
-    
+
         public virtual User User { get; set; }
     }
 }
