@@ -23,14 +23,28 @@ namespace IslandEscape
             this.SavdGameStates = new HashSet<SavdGameState>();
         }
     
+        /// <summary>
+        /// The ID of the game.
+        /// </summary>
         [Key]
         public int Id { get; set; }
+
+        /// <summary>
+        /// What date and time the game was created.
+        /// </summary>
         public System.DateTime Start { get; set; }
+
+        /// <summary>
+        /// The difficulty between 1 and 3.
+        /// </summary>
         [Display(Name = "Difficulty")]
         [Required(ErrorMessage = "Select a difficulty level.")]
-        [Range(0, 100, ErrorMessage = "Difficulty level must be between 0 and 100")]
+        [Range(1, 3, ErrorMessage = "Difficulty level must be between 1 and 3")]
         public int IntensityLevel { get; set; }
     
+        /// <summary>
+        /// The difficulty description.
+        /// </summary>
         public string IntensityDesc
         {
             get
@@ -53,6 +67,9 @@ namespace IslandEscape
             }
         }
 
+        /// <summary>
+        /// The collection of saved game states associated with this game.
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SavdGameState> SavdGameStates { get; set; }
     }

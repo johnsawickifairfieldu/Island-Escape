@@ -15,12 +15,34 @@ namespace IslandEscape
     {
         private bool? isPlayable;
 
+        /// <summary>
+        /// The ID of this saved game state.
+        /// </summary>
         public long Id { get; set; }
+
+        /// <summary>
+        /// The GameID associated with this saved game state.
+        /// </summary>
         public int GameId { get; set; }
+
+        /// <summary>
+        /// The UserID associated with this saved game state.
+        /// </summary>
         public string UserId { get; set; }
+
+        /// <summary>
+        /// When this game state was saved.
+        /// </summary>
         public System.DateTime Saved { get; set; }
+
+        /// <summary>
+        /// The progress of the user's game at the time it was saved. A value between 0 and 101.
+        /// </summary>
         public int Progress { get; set; }
 
+        /// <summary>
+        /// A game state is playable if it is not complete and is the user's most recent save for that game.
+        /// </summary>
         public bool IsPlayable
         {
             get
@@ -57,7 +79,14 @@ namespace IslandEscape
             }
         }
 
+        /// <summary>
+        /// The game for this saved game state.
+        /// </summary>
         public virtual Game Game { get; set; }
+
+        /// <summary>
+        /// The user for this saved game state.
+        /// </summary>
         public virtual User User { get; set; }
     }
 }

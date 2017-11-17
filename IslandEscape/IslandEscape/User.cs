@@ -9,7 +9,6 @@
 
 namespace IslandEscape
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -22,22 +21,38 @@ namespace IslandEscape
             this.SavdGameStates = new HashSet<SavdGameState>();
         }
     
+        /// <summary>
+        /// The ID of this user.
+        /// </summary>
         [Key]
         public string Id { get; set; }
 
+        /// <summary>
+        /// The user name (usually the email address).
+        /// </summary>
         [Display(Name = "User Name")]
         [StringLength(256)]
         [Required(AllowEmptyStrings = false)]
         [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string UserName { get; set; }
 
+        /// <summary>
+        /// The access level is a value between 0 and 3. 0 is unset, 1 is student, 2 is teacher, 3 is admin.
+        /// </summary>
         [Display(Name = "Access Level")]
         [Required(ErrorMessage = "Select an access level.")]
         [Range(0, 3, ErrorMessage = "Access level must be between 0 and 3")]
         public int AccessLevel { get; set; }
     
+        /// <summary>
+        /// The configurations associated with this user.
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Configuration> Configurations { get; set; }
+
+        /// <summary>
+        /// The saved game states associated with this user.
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SavdGameState> SavdGameStates { get; set; }
     }

@@ -14,22 +14,40 @@ namespace IslandEscape
 
     public partial class Configuration
     {
+        /// <summary>
+        /// The ID of the Configuration.
+        /// </summary>
         [Key]
         public int Id { get; set; }
 
+        /// <summary>
+        /// The brightness level with a range of 0 to 100.
+        /// </summary>
         [Display(Name = "Brightness Level")]
         [Required(ErrorMessage = "Select a brightness level.")]
         [Range(0, 100, ErrorMessage = "Brightness level must be between 0 and 100")]
         public int BrightnessLevel { get; set; }
 
+        /// <summary>
+        /// Whether or not to play sound.
+        /// </summary>
         [Display(Name = "Sound")]
         public bool SoundLevel { get; set; } = true;
 
+        /// <summary>
+        /// The UserID associated with this configuration.
+        /// </summary>
         [ForeignKey("User")]
         public string UserId { get; set; }
 
+        /// <summary>
+        /// Whether or not this configuration is chosen for use.
+        /// </summary>
         public bool Chosen { get; set; }
 
+        /// <summary>
+        /// The User associated with this configuration.
+        /// </summary>
         public virtual User User { get; set; }
     }
 }

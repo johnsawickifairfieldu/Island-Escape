@@ -10,6 +10,11 @@ namespace IslandEscape.Controllers
     {
         private IslandEscapeOfficialEntities db = new IslandEscapeOfficialEntities();
 
+        /// <summary>
+        /// This function helps build the query part of the URL for the configuration properties.
+        /// </summary>
+        /// <param name="user_id">The UserID</param>
+        /// <returns>A valid URL query part for the names and values of the configuration properties. Append to URL with already at least one name and value.</returns>
         public static string GetConfigurationURLPart(string user_id)
         {
             bool? sound = null;

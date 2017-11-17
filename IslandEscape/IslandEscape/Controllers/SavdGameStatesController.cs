@@ -13,6 +13,11 @@ namespace IslandEscape.Controllers
     {
         private IslandEscapeOfficialEntities db = new IslandEscapeOfficialEntities();
 
+        /// <summary>
+        /// Request a new game at a difficulty level.
+        /// </summary>
+        /// <param name="intensity_level">Difficulty level of new game. 1 is easy, 2 is medium, 3 is hard.</param>
+        /// <returns>The new GameID in json format.</returns>
         [WebMethod]
         public static string GetNewGame(int intensity_level)
         {
@@ -27,6 +32,13 @@ namespace IslandEscape.Controllers
             }
         }
 
+        /// <summary>
+        /// Save a game state.
+        /// </summary>
+        /// <param name="game_id">The GameID.</param>
+        /// <param name="user_id">The UserID.</param>
+        /// <param name="progress">The progess between 0 and 101. 100 is complete and failed. 101 is complete and passed.</param>
+        /// <returns>true or false on whether the save was successful.</returns>
         [WebMethod]
         public static string SaveGame(int game_id, string user_id, int progress)
         {
