@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<!-- for IE -->                              
+	<meta charset="utf-8">
+	<title>Island Escape Game</title>
+	<script src="jquery-2.1.4.min.js"></script>
+	<style>
+	.sidebtn {
+	  background: #8bc53f;
+	  background-image: -webkit-linear-gradient(top, #8bc53f, #008643);
+	  background-image: -moz-linear-gradient(top, #8bc53f, #008643);
+	  background-image: -ms-linear-gradient(top, #8bc53f, #008643);
+	  background-image: -o-linear-gradient(top, #8bc53f, #008643);
+	  background-image: linear-gradient(to bottom, #8bc53f, #008643);
+	  -webkit-border-radius: 2;
+	  -moz-border-radius: 2;
+	  border-radius: 2px;
+	  font-family: Arial;
+	  color: #ffffff;
+	  font-size: 14px;
+	  font-weight: bold;
+	  padding: 8px 14px 8px 14px;
+	  text-decoration: none;
+	}
+	.sidebtn:hover {
+	  background: #7dab38;
+	  background-image: -webkit-linear-gradient(top, #7dab38, #01733a);
+	  background-image: -moz-linear-gradient(top, #7dab38, #01733a);
+	  background-image: -ms-linear-gradient(top, #7dab38, #01733a);
+	  background-image: -o-linear-gradient(top, #7dab38, #01733a);
+	  background-image: linear-gradient(to bottom, #7dab38, #01733a);
+	  text-decoration: none;
+	}
+	.hoverborder{
+		border: double;
+		border-width:10px;	
+		border-color: #7dab38;
+	}
+	.selectborder{
+		border: ridge;
+		border-width:10px;	
+		border-color: #7dab38;
+	}
+	.whiteborder{
+		border: solid;
+		border-width:10px;	
+		border-color: white;
+	}
+	#container {
+		width: 100%;
+		overflow: auto;
+		text-align:center;
+	}
+	ul.horzmenu li {
+		display:inline;
+	}
+	[draggable] {
+	  -moz-user-select: none;
+	  -khtml-user-select: none;
+	  -webkit-user-select: none;
+	  user-select: none;
+	  /* Required to make elements draggable in old WebKit */
+	  -khtml-user-drag: element;
+	  -webkit-user-drag: element;
+	}
+
+	#columns {
+	  list-style-type: none;
+	}
+	.column {
+	  padding-bottom: 5px;
+	  padding-top: 5px;
+	  text-align: center;
+	  cursor: move;
+	}
+	.column header {
+	  color: black;
+	  background-color: #ccc;
+	  padding: 5px;
+	  border-bottom: 1px solid #ddd;
+	  border-radius: 10px;
+	  border: 2px solid #666666;
+	}
+	.column.dragElem {
+	  opacity: 0.4;
+	}
+	.column.over {
+	  border-top: 2px solid blue;
+	}
+	#partlist li {
+	  list-style-type: none;
+	  color: black;
+	  margin: 10px 0;
+	  background-color: #ccc;
+	  padding: 5px;
+	  border-bottom: 1px solid #ddd;
+	  border-radius: 10px;
+	  border: 2px solid #666666;
+	}
+	html, body {
+		height:100%;
+	} 
+	body {
+		background-image: url(Images/Island.png);
+		background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-position: left top;
+	}
+	</style>
+</head>
+<body>
+	<div class="container" id="container"></div>
+<script>
+	var allparts = ["Sail","Mast","Deck","Hull","Rudder","Wing","Tire","Mattress","Couch","Table"];
+	var bindparts = ["Rope","Glue","Nails","Sand","Palm"];
+	var correctanswer = ["Sail","Rope","Mast","Nails","Deck","Glue","Hull","Nails","Rudder"];
+	var selectedparts = [];
+	var cols, dragSrcEl = null;
+	var difficulty;
+	$(document).ready(function() {
+		startgame();
+	});
+	function clearright() {
+		var rightdisplay = document.getElementById("container");
+		while (rightdisplay.firstChild) {	rightdisplay.removeChild(rightdisplay.firstChild);	}
+	}
+	function mouseout(elem){
+		if(elem.firstChild.className !== "selectborder")
+			elem.firstChild.className = "whiteborder";
+	}
+	function mouseover(elem){
+		if(elem.firstChild.className !== "selectborder")
+			elem.firstChild.className = "hoverborder";
+	}
+	function mouseclick(elem){
+		if(elem.firstChild.className === "selectborder"){
+			elem.firstChild.className = "whiteborder";
+			var i = selectedparts.indexOf(elem.firstChild.alt);
+			selectedparts.splice(i, 1);
+		}else{
+			elem.firstChild.className = "selectborder";
+			selectedparts.push(elem.firstChild.alt);
+		}
+	}
+	function handleDragStart(e) {
+	  dragSrcEl = this;
+	  e.dataTransfer.effectAllowed = 'move';
+	  e.dataTransfer.setData('text/html', this.outerHTML);
+	  this.classList.add('dragElem');
+	}
+	function handleDragOver(e) {
+	  if (e.preventDefault) {
+		e.preventDefault();
+	  }
+	  this.classList.add('over');
+	  e.dataTransfer.dropEffect = 'move'; 
+	  return false;
+	}
+	function handleDrop(e) {
+	  if (e.stopPropagation) {
+		e.stopPropagation(); 
+	  }
+	  if (dragSrcEl != this) {
+		this.parentNode.removeChild(dragSrcEl);
+		var dropHTML = e.dataTransfer.getData('text/html');
+		this.insertAdjacentHTML('beforebegin',dropHTML);
+		var dropElem = this.previousSibling;
+		addDnDHandlers(dropElem);
+	  }
+	  this.classList.remove('over');
+	  return false;
+	}
+	function addDnDHandlers(elem) {
+	  elem.addEventListener('dragstart', handleDragStart, false);
+	  elem.addEventListener('dragover', handleDragOver, false);
+	  elem.addEventListener('drop', handleDrop, false);
+	}
+	function startgame(){
+		clearright();
+		selectedparts = [];
+		$('<br><h1>Select Game Difficulty</h1>').appendTo('.container');
+		var $select = $('<select id="picked_difficulty" />').appendTo('.container');
+		$select.append('<option value="1">Easy</option>');
+		$select.append('<option value="2">Medium</option>');
+		$select.append('<option value="3">Hard</option>');
+		$('<br>').appendTo('.container');
+		$('<button class="sidebtn" onclick="selectparts()">Play Game </button>').appendTo('.container');
+	}
+	function selectparts(){
+		var difficulty = document.getElementById("picked_difficulty").value;
+		clearright();
+		$('<br><h1>Select Ship Components</h1>').appendTo('.container');
+		var $carrierenum = $('<ul class="horzmenu">').appendTo('.container');
+		for(var i = 0;i < (7+Number(difficulty));i++){
+			$carrierenum.append('<li onclick="mouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+allparts[i]+'" src="Images/'+allparts[i]+'.png" height="150" width="150"></li>');
+		}
+		$('<br><button class="sidebtn" onclick="orderparts()">Order Parts</button>').appendTo('.container');
+	}
+	function orderparts(){
+		clearright();
+		$('<br><h1>Order Ship Components</h1>').appendTo('.container');
+		var $ul = $('<ul id="columns" />').appendTo('.container');
+		for(var i = 0;i < selectedparts.length;i++){
+			$ul.append('<li class="column" draggable="true"><header>'+selectedparts[i]+'</header></li>');
+		}
+		$('<br><button class="sidebtn" onclick="bindtoparts()">Bind Parts</button>').appendTo('.container');
+		cols = document.querySelectorAll('#columns .column');
+		[].forEach.call(cols, addDnDHandlers);
+	}
+	function bindtoparts(){
+		selectedparts = [];
+		var items = document.getElementById("columns").getElementsByTagName("li");
+		for (var i = 0; i < items.length; ++i) {
+		  selectedparts[i] = items[i].innerText;
+		}
+		clearright();
+		$('<br><h1>Select Binding Components</h1>').appendTo('.container');
+		var selectlist = "<select>";
+		for(var i = 0;i < bindparts.length;i++){
+			selectlist += '<option value="'+bindparts[i]+'">'+bindparts[i]+'</option>';
+		}
+		selectlist += "</select>";
+		var $ul = $('<ul id="partlist" />').appendTo('.container');
+		for(var i = 0;i < selectedparts.length;i++){
+			$ul.append('<li><header>'+selectedparts[i]+'</header></li>');
+			if(i < (selectedparts.length-1))
+				$ul.append('<li>'+selectlist+'</li>');
+		}
+		$('<br><button class="sidebtn" onclick="testboat()">Test Boats</button>').appendTo('.container');
+	}
+	function testboat(){
+		selectedparts = [];
+		var items = document.getElementById("partlist").getElementsByTagName("li");
+		for (var i = 0; i < items.length; ++i) {
+		  selectedparts[i] = items[i].firstChild.value || items[i].innerText;
+		  selectedparts[i] = selectedparts[i].replace(/^\s+|\s+$/g, '');
+		}
+		var endresult = (selectedparts.length == correctanswer.length) && selectedparts.every(function(element, index) {return element === correctanswer[index];});
+		clearright();
+		if(endresult){
+			$('<br><h1>You Escaped!</h1>').appendTo('.container');
+			$('<img class="whiteborder" alt="Success" src="Images/Success.png" height="150" width="150">').appendTo('.container');
+		}else{
+			$('<br><h1>Your Boat Sank!</h1>').appendTo('.container');
+			$('<img class="whiteborder" alt="Failure" src="Images/Failure.png" height="150" width="150">').appendTo('.container');
+		}
+		$('<br><button class="sidebtn" onclick="startgame()">Play New Game</button>').appendTo('.container');
+	}
+	function getnewgame(selectedlevel){
+		$.post('http://'+location.host+'/GetNewGame', '{"intensity_level":"'+selectedlevel+'"}', function(data, textStatus) {
+			$.each(data, function (key, val) {
+				console.log(key+' '+val);	
+			});
+		}, "json");
+	}
+	function savegame(gameid, userid, progress){
+		$.post('http://'+location.host+'/SaveGame', '{"game_id":"'+gameid+'","user_id":"'+userid+'","progress":"'+progress+'"}', function(data, textStatus) {
+			$.each(data, function (key, val) {
+				console.log(key+' '+val);	
+			});
+		}, "json");
+	}	
+</script>
+</body>
+</html>
