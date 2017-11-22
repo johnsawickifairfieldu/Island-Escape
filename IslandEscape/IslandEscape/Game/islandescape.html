@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 	<!-- for IE -->                              
@@ -188,7 +188,9 @@
 		$('<button class="sidebtn" onclick="selectparts()">Play Game </button>').appendTo('.container');
 	}
 	function selectparts(){
-		var difficulty = document.getElementById("picked_difficulty").value;
+	    var difficulty = document.getElementById("picked_difficulty").value;
+	    getnewgame(difficulty);
+	    savegame(25);
 		clearright();
 		$('<br><h1>Select Ship Components</h1>').appendTo('.container');
 		var $carrierenum = $('<ul class="horzmenu">').appendTo('.container');
@@ -197,8 +199,9 @@
 		}
 		$('<br><button class="sidebtn" onclick="orderparts()">Order Parts</button>').appendTo('.container');
 	}
-	function orderparts(){
-		clearright();
+	function orderparts() {
+	    savegame(50);
+	    clearright();	    
 		$('<br><h1>Order Ship Components</h1>').appendTo('.container');
 		var $ul = $('<ul id="columns" />').appendTo('.container');
 		for(var i = 0;i < selectedparts.length;i++){
@@ -208,7 +211,8 @@
 		cols = document.querySelectorAll('#columns .column');
 		[].forEach.call(cols, addDnDHandlers);
 	}
-	function bindtoparts(){
+	function bindtoparts() {
+	    savegame(75);
 		selectedparts = [];
 		var items = document.getElementById("columns").getElementsByTagName("li");
 		for (var i = 0; i < items.length; ++i) {
@@ -238,29 +242,68 @@
 		}
 		var endresult = (selectedparts.length == correctanswer.length) && selectedparts.every(function(element, index) {return element === correctanswer[index];});
 		clearright();
-		if(endresult){
+		if (endresult) {
+		    savegame(101);
 			$('<br><h1>You Escaped!</h1>').appendTo('.container');
 			$('<img class="whiteborder" alt="Success" src="Images/Success.png" height="150" width="150">').appendTo('.container');
-		}else{
+		} else {
+		    savegame(100);
 			$('<br><h1>Your Boat Sank!</h1>').appendTo('.container');
 			$('<img class="whiteborder" alt="Failure" src="Images/Failure.png" height="150" width="150">').appendTo('.container');
 		}
 		$('<br><button class="sidebtn" onclick="startgame()">Play New Game</button>').appendTo('.container');
 	}
-	function getnewgame(selectedlevel){
-		$.post('http://'+location.host+'/GetNewGame', '{"intensity_level":"'+selectedlevel+'"}', function(data, textStatus) {
-			$.each(data, function (key, val) {
-				console.log(key+' '+val);	
-			});
-		}, "json");
+
+	var GLOBAL_GAME_ID;
+
+	function getnewgame(selectedlevel) {	  
+	   $.ajax({
+	        url: '../SavdGameStates/GetNewGame',
+	        type: 'POST',
+	        dataType: 'json',
+	        // we set cache: false because GET requests are often cached by browsers
+	        // IE is particularly aggressive in that respect
+	        cache: false,
+	        data: { intensity_level: selectedlevel },
+	        success: function (game) {
+	            $.each(game, function (key, val) {
+	                console.log(key + ' ' + val);	                
+	            });
+	            GLOBAL_GAME_ID = game.Id;
+	            
+	        },
+            async: false
+	    });
 	}
-	function savegame(gameid, userid, progress){
-		$.post('http://'+location.host+'/SaveGame', '{"game_id":"'+gameid+'","user_id":"'+userid+'","progress":"'+progress+'"}', function(data, textStatus) {
-			$.each(data, function (key, val) {
-				console.log(key+' '+val);	
-			});
-		}, "json");
+
+	function getValueFromURL(name) {
+	    var url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    
+	    if (!results) return null;
+	    if (!results[2]) return '';
+    
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
 	}	
+
+	function savegame(progrezz) {
+	   $.ajax({
+	        url: '../SavdGameStates/SaveGame',
+	        type: 'POST',
+	        dataType: 'json',
+	        // we set cache: false because GET requests are often cached by browsers
+	        // IE is particularly aggressive in that respect
+	        cache: false,
+	        data: { game_id: GLOBAL_GAME_ID, user_id: getValueFromURL('userid'), progress: progrezz },
+	        success: function (records) {
+	            console.log('Records saved: ' + records)
+	        },
+	        async: false
+	    });
+	}
+    
 </script>
 </body>
 </html>

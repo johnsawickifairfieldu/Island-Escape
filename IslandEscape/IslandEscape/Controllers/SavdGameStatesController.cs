@@ -18,17 +18,17 @@ namespace IslandEscape.Controllers
         /// </summary>
         /// <param name="intensity_level">Difficulty level of new game. 1 is easy, 2 is medium, 3 is hard.</param>
         /// <returns>The new GameID in json format.</returns>
-        [WebMethod]
-        public static string GetNewGame(int intensity_level)
+        [HttpPost]
+        public ActionResult GetNewGame(int intensity_level)
         {
             using (var context = new IslandEscapeOfficialEntities())
             {
-                var new_game = new Game() { IntensityLevel = intensity_level };
+                var new_game = new Game() { IntensityLevel = intensity_level, Start = DateTime.Now };
 
                 context.Games.Add(new_game);
                 context.SaveChanges();
                                                
-                return "{\"gameid\":" + new_game.Id + "}";
+                return Json(new_game);
             }
         }
 
@@ -39,8 +39,8 @@ namespace IslandEscape.Controllers
         /// <param name="user_id">The UserID.</param>
         /// <param name="progress">The progess between 0 and 101. 100 is complete and failed. 101 is complete and passed.</param>
         /// <returns>true or false on whether the save was successful.</returns>
-        [WebMethod]
-        public static string SaveGame(int game_id, string user_id, int progress)
+        [HttpPost]
+        public ActionResult SaveGame(int game_id, string user_id, int progress)
         {
             int records = 0;
 
@@ -52,7 +52,7 @@ namespace IslandEscape.Controllers
                 records = context.SaveChanges();
             }
 
-            return "{\"result\":" + (records == 0 ? false : true) + "}";
+            return Json(records);
         }
 
         // GET: SavdGameStates

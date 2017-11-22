@@ -14,7 +14,7 @@
     @if (Request.IsAuthenticated)
     {
         <nav style="text-align:left;">
-            <h3 style="margin-top:30px;"><a href="@string.Format("../Game/game.html?userid={0}&username={1}{2}", user_id, user_name, config)">Start New Game</a></h3>
+            <h3 style="margin-top:30px;"><a href="@string.Format("../Game/islandescape.html?userid={0}&username={1}{2}", user_id, user_name, config)">Start New Game</a></h3>
             <h3>@Html.ActionLink("Previous Games", "Index", "SavdGameStates")</h3>
             <h3>@Html.ActionLink("User Details", "Index", "Users")</h3>
         </nav>

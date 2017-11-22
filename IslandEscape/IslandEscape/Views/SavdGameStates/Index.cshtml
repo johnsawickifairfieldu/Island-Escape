@@ -12,7 +12,7 @@
 <h2>@ViewBag.Title</h2>
 
 <p>
-    <a href="@string.Format("../Game/game.html?userid={0}&username={1}{2}", user_id, user_name, config)">Start New Game</a>
+    <a href="@string.Format("../Game/islandescape.html?userid={0}&username={1}{2}", user_id, user_name, config)">Start New Game</a>
 </p>
 <table class="table">
     <tr>
@@ -63,7 +63,7 @@
             @Html.DisplayFor(modelItem => item.User.UserName)
         </td>
         <td style="display:none;">@if (item.UserId == user_id && item.IsPlayable) { 
-            <a href="@string.Format("../Game/game.html?gameid={0}&userid={1}&username={2}&progress={3}&intensity={4}{5}",item.GameId, item.UserId, item.User.UserName, item.Progress, item.Game.IntensityLevel, config)">Continue Playing</a>}
+            <a href="@string.Format("../Game/islandgame.html?gameid={0}&userid={1}&username={2}&progress={3}&intensity={4}{5}",item.GameId, item.UserId, item.User.UserName, item.Progress, item.Game.IntensityLevel, config)">Continue Playing</a>}
         </td>
     </tr>
 }

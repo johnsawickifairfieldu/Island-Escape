@@ -167,16 +167,19 @@ namespace IslandEscape.Controllers
             IList<Configuration> chosen_configs = db.Configurations.Where(c => c.UserId == config_user_id && c.Chosen).ToList();
             IEnumerable<Configuration> configs = db.Configurations.Where(c => c.UserId == config_user_id);
 
-            if (chosen_configs.Count == 0 && configs.FirstOrDefault() != null) {
+            if (chosen_configs.Count == 0 && configs.FirstOrDefault() != null)
+            {
                 configs.FirstOrDefault().Chosen = true;
-            }else if(chosen_configs.Count > 1)
+            }
+            else if(chosen_configs.Count > 1)
             {
                 for (int i = 1; i < chosen_configs.Count; i++)
                 {
                     if(!chosen_configs[i].Equals(config))
                     {
                         chosen_configs[i].Chosen = false;
-                    }else
+                    }
+                    else
                     {
                         chosen_configs[0].Chosen = false;
                     }
