@@ -1,10 +1,11 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 	<!-- for IE -->                              
 	<meta charset="utf-8">
 	<title>Island Escape Game</title>
 	<script src="jquery-2.1.4.min.js"></script>
+	<script src="sortable.min.js"></script>
 	<style>
 	.sidebtn {
 	  background: #8bc53f;
@@ -55,57 +56,20 @@
 	ul.horzmenu li {
 		display:inline;
 	}
-	[draggable] {
-	  -moz-user-select: none;
-	  -khtml-user-select: none;
-	  -webkit-user-select: none;
-	  user-select: none;
-	  /* Required to make elements draggable in old WebKit */
-	  -khtml-user-drag: element;
-	  -webkit-user-drag: element;
+	#horzmenu {
+		list-style-type: none;
 	}
-
-	#columns {
-	  list-style-type: none;
-	}
-	.column {
-	  padding-bottom: 5px;
-	  padding-top: 5px;
-	  text-align: center;
-	  cursor: move;
-	}
-	.column header {
-	  color: black;
-	  background-color: #ccc;
-	  padding: 5px;
-	  border-bottom: 1px solid #ddd;
-	  border-radius: 10px;
-	  border: 2px solid #666666;
-	}
-	.column.dragElem {
-	  opacity: 0.4;
-	}
-	.column.over {
-	  border-top: 2px solid blue;
-	}
-	#partlist li {
-	  list-style-type: none;
-	  color: black;
-	  margin: 10px 0;
-	  background-color: #ccc;
-	  padding: 5px;
-	  border-bottom: 1px solid #ddd;
-	  border-radius: 10px;
-	  border: 2px solid #666666;
+	ul li ul li {
+		display: inline-block;
 	}
 	html, body {
 		height:100%;
 	} 
 	body {
-		background-image: url(Images/Island.png);
+		//background-image: url(Images/Island.png);
 		background-size: 100% 100%;
-        background-repeat: no-repeat;
         background-position: left top;
+		background: #C2B280;
 	}
 	</style>
 </head>
@@ -143,38 +107,12 @@
 			selectedparts.push(elem.firstChild.alt);
 		}
 	}
-	function handleDragStart(e) {
-	  dragSrcEl = this;
-	  e.dataTransfer.effectAllowed = 'move';
-	  e.dataTransfer.setData('text/html', this.outerHTML);
-	  this.classList.add('dragElem');
-	}
-	function handleDragOver(e) {
-	  if (e.preventDefault) {
-		e.preventDefault();
-	  }
-	  this.classList.add('over');
-	  e.dataTransfer.dropEffect = 'move'; 
-	  return false;
-	}
-	function handleDrop(e) {
-	  if (e.stopPropagation) {
-		e.stopPropagation(); 
-	  }
-	  if (dragSrcEl != this) {
-		this.parentNode.removeChild(dragSrcEl);
-		var dropHTML = e.dataTransfer.getData('text/html');
-		this.insertAdjacentHTML('beforebegin',dropHTML);
-		var dropElem = this.previousSibling;
-		addDnDHandlers(dropElem);
-	  }
-	  this.classList.remove('over');
-	  return false;
-	}
-	function addDnDHandlers(elem) {
-	  elem.addEventListener('dragstart', handleDragStart, false);
-	  elem.addEventListener('dragover', handleDragOver, false);
-	  elem.addEventListener('drop', handleDrop, false);
+	function bindmouseclick(elem){
+		var children = elem.parentElement.children;
+		for (var i = 0; i < children.length; i++) {
+		  children[i].firstChild.className = "whiteborder";
+		}
+		elem.firstChild.className = "selectborder";
 	}
 	function startgame(){
 		clearright();
@@ -188,46 +126,47 @@
 		$('<button class="sidebtn" onclick="selectparts()">Play Game </button>').appendTo('.container');
 	}
 	function selectparts(){
-	    var difficulty = document.getElementById("picked_difficulty").value;
-	    getnewgame(difficulty);
+		var difficulty = document.getElementById("picked_difficulty").value;
+		getnewgame(difficulty);
 	    savegame(25);
 		clearright();
 		$('<br><h1>Select Ship Components</h1>').appendTo('.container');
 		var $carrierenum = $('<ul class="horzmenu">').appendTo('.container');
 		for(var i = 0;i < (7+Number(difficulty));i++){
-			$carrierenum.append('<li onclick="mouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+allparts[i]+'" src="Images/'+allparts[i]+'.png" height="150" width="150"></li>');
+			$carrierenum.append('<li onclick="mouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+allparts[i]+'" src="Images/'+allparts[i]+'.png" height="100" width="100"></li>');
 		}
 		$('<br><button class="sidebtn" onclick="orderparts()">Order Parts</button>').appendTo('.container');
 	}
-	function orderparts() {
-	    savegame(50);
-	    clearright();	    
+	function orderparts(){
+		savegame(50);
+		clearright();
 		$('<br><h1>Order Ship Components</h1>').appendTo('.container');
-		var $ul = $('<ul id="columns" />').appendTo('.container');
+		var $ul = $('<ul id="horzmenu" />').appendTo('.container');
 		for(var i = 0;i < selectedparts.length;i++){
-			$ul.append('<li class="column" draggable="true"><header>'+selectedparts[i]+'</header></li>');
+			$ul.append('<li><img class="whiteborder" alt="'+selectedparts[i]+'" src="Images/'+selectedparts[i]+'.png" height="100" width="100"></li>');
 		}
 		$('<br><button class="sidebtn" onclick="bindtoparts()">Bind Parts</button>').appendTo('.container');
-		cols = document.querySelectorAll('#columns .column');
-		[].forEach.call(cols, addDnDHandlers);
+		var el = document.getElementById('horzmenu');
+		var sortable = Sortable.create(el);
 	}
-	function bindtoparts() {
-	    savegame(75);
+	function bindtoparts(){
+		savegame(75);
 		selectedparts = [];
-		var items = document.getElementById("columns").getElementsByTagName("li");
+		var items = document.getElementById("horzmenu").getElementsByTagName("li");
 		for (var i = 0; i < items.length; ++i) {
-		  selectedparts[i] = items[i].innerText;
+		  selectedparts[i] = items[i].firstChild.alt || items[i].innerText;
 		}
 		clearright();
 		$('<br><h1>Select Binding Components</h1>').appendTo('.container');
-		var selectlist = "<select>";
+		
+		var selectlist = '<ul>';
 		for(var i = 0;i < bindparts.length;i++){
-			selectlist += '<option value="'+bindparts[i]+'">'+bindparts[i]+'</option>';
+			selectlist += '<li onclick="bindmouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+bindparts[i]+'" src="Images/'+bindparts[i]+'.png" height="100" width="100"></li>';
 		}
-		selectlist += "</select>";
-		var $ul = $('<ul id="partlist" />').appendTo('.container');
+		selectlist += '</ul>';
+		var $ul = $('<ul id="horzmenu" />').appendTo('.container');
 		for(var i = 0;i < selectedparts.length;i++){
-			$ul.append('<li><header>'+selectedparts[i]+'</header></li>');
+			$ul.append('<li><img class="selectborder" alt="'+selectedparts[i]+'" src="Images/'+selectedparts[i]+'.png" height="100" width="100"></li>');
 			if(i < (selectedparts.length-1))
 				$ul.append('<li>'+selectlist+'</li>');
 		}
@@ -235,27 +174,29 @@
 	}
 	function testboat(){
 		selectedparts = [];
-		var items = document.getElementById("partlist").getElementsByTagName("li");
+		var items = document.getElementById("horzmenu").getElementsByTagName("li"), iter=0;
 		for (var i = 0; i < items.length; ++i) {
-		  selectedparts[i] = items[i].firstChild.value || items[i].innerText;
-		  selectedparts[i] = selectedparts[i].replace(/^\s+|\s+$/g, '');
+			if(items[i].firstChild.className === "selectborder"){
+				selectedparts[iter] = items[i].firstChild.alt;
+				selectedparts[iter] = selectedparts[iter].replace(/^\s+|\s+$/g, '');
+				console.log(selectedparts[iter]);
+				iter++;
+			}
 		}
 		var endresult = (selectedparts.length == correctanswer.length) && selectedparts.every(function(element, index) {return element === correctanswer[index];});
 		clearright();
-		if (endresult) {
-		    savegame(101);
+		if(endresult){
+			savegame(101);
 			$('<br><h1>You Escaped!</h1>').appendTo('.container');
-			$('<img class="whiteborder" alt="Success" src="Images/Success.png" height="150" width="150">').appendTo('.container');
-		} else {
-		    savegame(100);
+			$('<img class="whiteborder" alt="Success" src="Images/Success.png" height="100" width="100">').appendTo('.container');
+		}else{
+			savegame(100);
 			$('<br><h1>Your Boat Sank!</h1>').appendTo('.container');
-			$('<img class="whiteborder" alt="Failure" src="Images/Failure.png" height="150" width="150">').appendTo('.container');
+			$('<img class="whiteborder" alt="Failure" src="Images/Failure.png" height="100" width="100">').appendTo('.container');
 		}
 		$('<br><button class="sidebtn" onclick="startgame()">Play New Game</button>').appendTo('.container');
 	}
-
 	var GLOBAL_GAME_ID;
-
 	function getnewgame(selectedlevel) {	  
 	   $.ajax({
 	        url: '../SavdGameStates/GetNewGame',
@@ -275,7 +216,6 @@
             async: false
 	    });
 	}
-
 	function getValueFromURL(name) {
 	    var url = window.location.href;
 	    name = name.replace(/[\[\]]/g, "\\$&");
@@ -287,7 +227,6 @@
     
 	    return decodeURIComponent(results[2].replace(/\+/g, " "));
 	}	
-
 	function savegame(progrezz) {
 	   $.ajax({
 	        url: '../SavdGameStates/SaveGame',
@@ -303,7 +242,6 @@
 	        async: false
 	    });
 	}
-    
 </script>
 </body>
 </html>
