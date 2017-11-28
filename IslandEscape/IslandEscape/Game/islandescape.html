@@ -87,7 +87,7 @@
 		position: absolute;
 		z-index: 1;
 		width: 120px;
-		top: 100%;
+		bottom: 0%;
 		left: 50%; 
 		margin-left: -60px;
 	}
@@ -167,7 +167,7 @@
 		$('<br><h1>Design Phase</h1><h1>Order Ship Components</h1>').appendTo('.container');
 		var $ul = $('<ul id="horzmenu" />').appendTo('.container');
 		for(var i = 0;i < selectedparts.length;i++){
-			$ul.append('<li><img class="whiteborder" alt="'+selectedparts[i]+'" src="Images/'+selectedparts[i]+'.png" height="100" width="100"></li>');
+			$ul.append('<li onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+selectedparts[i]+'" src="Images/'+selectedparts[i]+'.png" height="100" width="100"></li>');
 		}
 		$('<br><button class="sidebtn" onclick="bindtoparts()">Bind Parts</button>').appendTo('.container');
 		var el = document.getElementById('horzmenu');
@@ -181,16 +181,16 @@
 		  selectedparts[i] = items[i].firstChild.alt || items[i].innerText;
 		}
 		clearright();
-		$('<br><h1>Implmentation Phase</h1><h1>Select Binding Components</h1>').appendTo('.container');
+		$('<br><h1>Implementation Phase</h1><h1>Select Binding Components</h1>').appendTo('.container');
 		
 		var selectlist = '<ul>';
 		for(var i = 0;i < bindparts.length;i++){
-			selectlist += '<li onclick="bindmouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+bindparts[i]+'" src="Images/'+bindparts[i]+'.png" height="100" width="100"></li>';
+			selectlist += '<li class="tooltip" onclick="bindmouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+bindparts[i]+'" src="Images/'+bindparts[i]+'.png" height="100" width="100"><span class="tooltiptext">'+bindparts[i]+'</span></li>';
 		}
 		selectlist += '</ul>';
 		var $ul = $('<ul id="horzmenu" />').appendTo('.container');
 		for(var i = 0;i < selectedparts.length;i++){
-			$ul.append('<li><img class="selectborder" alt="'+selectedparts[i]+'" src="Images/'+selectedparts[i]+'.png" height="100" width="100"></li>');
+			$ul.append('<li class="tooltip"><img class="selectborder" alt="'+selectedparts[i]+'" src="Images/'+selectedparts[i]+'.png" height="100" width="100"><span class="tooltiptext">'+selectedparts[i]+'</span></li>');
 			if(i < (selectedparts.length-1))
 				$ul.append('<li>'+selectlist+'</li>');
 		}
