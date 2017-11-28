@@ -53,6 +53,9 @@
 		overflow: auto;
 		text-align:center;
 	}
+	.100width {
+		width: 100%;
+	}
 	ul.horzmenu li {
 		display:inline;
 	}
@@ -68,8 +71,29 @@
 	body {
 		background-image: url(Images/Island.png);
 		background-size: 100% 100%;
-        	background-position: left top;
-		//background: #C2B280;
+        background-position: left top;
+	}
+	.tooltip {
+		position: relative;
+		display: inline-block;
+	}
+	.tooltip .tooltiptext {
+		visibility: hidden;
+		background-color: black;
+		color: #fff;
+		text-align: center;
+		padding: 5px 0;
+		border-radius: 6px;
+		position: absolute;
+		z-index: 1;
+		width: 120px;
+		top: 100%;
+		left: 50%; 
+		margin-left: -60px;
+	}
+
+	.tooltip:hover .tooltiptext {
+		visibility: visible;
 	}
 	</style>
 </head>
@@ -130,17 +154,17 @@
 		getnewgame(difficulty);
 	    savegame(25);
 		clearright();
-		$('<br><h1>Select Ship Components</h1>').appendTo('.container');
-		var $carrierenum = $('<ul class="horzmenu">').appendTo('.container');
+		$('<br><h1>Planning Phase</h1><h1>Select Ship Components</h1>').appendTo('.container');
+		var $selecttable = $('<ul class="horzmenu">').appendTo('.container');
 		for(var i = 0;i < (7+Number(difficulty));i++){
-			$carrierenum.append('<li onclick="mouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+allparts[i]+'" src="Images/'+allparts[i]+'.png" height="100" width="100"></li>');
+			$selecttable.append('<li class="tooltip" onclick="mouseclick(this)" onmouseout="mouseout(this)" onmouseover="mouseover(this)"><img class="whiteborder" alt="'+allparts[i]+'" src="Images/'+allparts[i]+'.png" height="100" width="100"><span class="tooltiptext">'+allparts[i]+'</span></li>');
 		}
 		$('<br><button class="sidebtn" onclick="orderparts()">Order Parts</button>').appendTo('.container');
 	}
 	function orderparts(){
 		savegame(50);
 		clearright();
-		$('<br><h1>Order Ship Components</h1>').appendTo('.container');
+		$('<br><h1>Design Phase</h1><h1>Order Ship Components</h1>').appendTo('.container');
 		var $ul = $('<ul id="horzmenu" />').appendTo('.container');
 		for(var i = 0;i < selectedparts.length;i++){
 			$ul.append('<li><img class="whiteborder" alt="'+selectedparts[i]+'" src="Images/'+selectedparts[i]+'.png" height="100" width="100"></li>');
@@ -157,7 +181,7 @@
 		  selectedparts[i] = items[i].firstChild.alt || items[i].innerText;
 		}
 		clearright();
-		$('<br><h1>Select Binding Components</h1>').appendTo('.container');
+		$('<br><h1>Implmentation Phase</h1><h1>Select Binding Components</h1>').appendTo('.container');
 		
 		var selectlist = '<ul>';
 		for(var i = 0;i < bindparts.length;i++){
@@ -187,11 +211,11 @@
 		clearright();
 		if(endresult){
 			savegame(101);
-			$('<br><h1>You Escaped!</h1>').appendTo('.container');
+			$('<br><h1>Testing Phase</h1><h1>You Escaped!</h1>').appendTo('.container');
 			$('<img class="whiteborder" alt="Success" src="Images/Success.png" height="100" width="100">').appendTo('.container');
 		}else{
 			savegame(100);
-			$('<br><h1>Your Boat Sank!</h1>').appendTo('.container');
+			$('<br><h1>Testing Phase</h1><h1>Your Boat Sank!</h1>').appendTo('.container');
 			$('<img class="whiteborder" alt="Failure" src="Images/Failure.png" height="100" width="100">').appendTo('.container');
 		}
 		$('<br><button class="sidebtn" onclick="startgame()">Play New Game</button>').appendTo('.container');
