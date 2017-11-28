@@ -61,7 +61,7 @@ namespace IslandEscape.Controllers
             string user_id = User.Identity.GetUserId();
             int access_level = db.Users.Where(u => u.Id == user_id).FirstOrDefault().AccessLevel;
 
-            var savdGameStates = db.SavdGameStates.Where(s => s.UserId == user_id || access_level >= 2).Include(s => s.Game).Include(s => s.User).OrderByDescending(s => s.UserId == user_id).ThenByDescending(s => s.Progress >= 100 ? -1 : 1).ThenByDescending(s => s.Saved);
+            var savdGameStates = db.SavdGameStates.Where(s => s.UserId == user_id || access_level >= 2).Include(s => s.Game).Include(s => s.User).OrderByDescending(s => s.UserId == user_id).ThenByDescending(s => s.Saved);
 
             return View(savdGameStates.ToList());
         }
